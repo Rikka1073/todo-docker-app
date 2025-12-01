@@ -10,15 +10,13 @@ interface Todo {
   completed: boolean;
 }
 
-const todos: Todo[] = [];
-
 const app = new Hono();
 const prisma = new PrismaClient();
 
 // 追加
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
   })
 );
 
@@ -56,10 +54,12 @@ app.put("/todos/:id", async (c) => {
   }
 });
 
+const port = Number(process.env.PORT) || 3000;
+
 serve(
   {
     fetch: app.fetch,
-    port: 3000,
+    port: port,
   },
   (info) => {
     console.log(`Server is running on http://localhost:${info.port}`);
