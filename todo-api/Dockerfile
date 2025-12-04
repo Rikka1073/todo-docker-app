@@ -1,11 +1,43 @@
-FROM node:18-alpine
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
+# 依存関係のインストール
+COPY package*.json ./
+COPY prisma ./prisma/
+
+RUN npm ci
+
 COPY . .
 
-RUN npm install
+# Prisma Clientの生成
+RUN npx prisma generate
 
-EXPOSE 3000
+RUN npm run build
 
-CMD ["npm", "run", "dev"]
+# 本番ステージ
+FROM node:20-alpine AS runner
+
+WORKDIR /app
+
+# 本番依存関係のみをインストール
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+# Prismaスキーマとビルド成果物をコピー
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/src/generated ./src/generated
+
+# 非rootユーザーで実行
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nodejs -u 1001
+USER nodejs
+
+# Cloud RunのPORT環境変数を使用
+ENV PORT=8080
+EXPOSE 8080
+
+# 本番起動コマンド
+CMD ["node", "dist/index.js"]
+
