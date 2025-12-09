@@ -27,7 +27,9 @@ RUN npm ci --omit=dev
 # Prismaスキーマとビルド成果物をコピー
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/src/generated ./src/generated
+
+# runner stageでPrisma Clientを生成
+RUN npx prisma generate
 
 # 非rootユーザーで実行
 RUN addgroup -g 1001 -S nodejs
