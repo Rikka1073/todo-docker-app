@@ -26,6 +26,7 @@ RUN npm ci --omit=dev
 
 # Prismaスキーマとビルド成果物をコピー
 COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
 COPY --from=builder /app/dist ./dist
 
 # runner stageでPrisma Clientを生成（ダミーのDATABASE_URLを設定）
