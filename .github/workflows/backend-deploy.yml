@@ -65,6 +65,7 @@ jobs:
       - name: Run database migrations (Optional)
         working-directory: ./todo-api
         run: |
+          npm ci
           npx prisma migrate deploy
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
