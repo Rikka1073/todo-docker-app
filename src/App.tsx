@@ -7,6 +7,8 @@ interface Todo {
   completed: boolean;
 }
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
 function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [title, setTitle] = useState("");
@@ -16,7 +18,7 @@ function App() {
   }, []);
 
   const fetchTodos = async () => {
-    const res = await fetch("http://localhost:3000/todos");
+    const res = await fetch(`${API_URL}/todos`);
     const data = await res.json();
     setTodos(data);
     console.log("取得したTodos:", data.todos);
@@ -26,7 +28,7 @@ function App() {
   const handleAddTodo = async () => {
     if (!title.trim()) return;
     try {
-      const res = await axios.post("http://localhost:3000/todos", { title });
+      const res = await axios.post(`${API_URL}/todos`, { title });
       const newTodo = res.data.todo;
       setTodos([...todos, newTodo]);
       setTitle("");
@@ -41,7 +43,7 @@ function App() {
     if (!todo) return;
     const updatedCompleted = !todo.completed;
     console.log("更新対象のTodo:", todo);
-    const res = await axios.put(`http://localhost:3000/todos/${id}`, { completed: updatedCompleted });
+    const res = await axios.put(`${API_URL}/todos/${id}`, { completed: updatedCompleted });
     const updatedTodo = res.data.todo;
     setTodos(todos.map((t) => (t.id === id ? updatedTodo : t)));
   };
