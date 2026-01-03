@@ -28,9 +28,7 @@ RUN npm ci --omit=dev
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
 COPY --from=builder /app/dist ./dist
-
-# runner stageでPrisma Clientを生成（ダミーのDATABASE_URLを設定）
-RUN DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy" npx prisma generate
+COPY --from=builder /app/src/generated ./dist/generated
 
 # 非rootユーザーで実行
 RUN addgroup -g 1001 -S nodejs
