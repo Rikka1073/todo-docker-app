@@ -2,7 +2,18 @@
   "permissions": {
     "allow": [
       "Bash(docker exec:*)",
-      "Bash(docker-compose down:*)"
+      "Bash(docker-compose down:*)",
+      "Bash(gh:*)",
+      "Bash(export CLOUDSDK_PYTHON=/opt/homebrew/bin/python3)",
+      "Bash(gcloud version:*)",
+      "Bash(brew install:*)",
+      "Bash(sudo ln:*)",
+      "Bash(/opt/homebrew/share/google-cloud-sdk/bin/gcloud version)",
+      "Bash(echo:*)",
+      "Bash(source ~/.zshrc)",
+      "Bash(export PATH=\"/opt/homebrew/share/google-cloud-sdk/bin:$PATH\")",
+      "Bash(gcloud auth:*)",
+      "Bash(gcloud config:*)"
     ],
     "deny": [],
     "ask": []
